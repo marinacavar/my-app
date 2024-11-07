@@ -1,4 +1,3 @@
-// src/components/login/Login.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.scss';
@@ -10,14 +9,14 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Retrieve registration data from local storage
+    
     const storedData = localStorage.getItem('registrationData');
     if (storedData) {
       const { email: storedEmail, password: storedPassword } = JSON.parse(storedData);
-      // Validate login credentials
+     
       if (email === storedEmail && password === storedPassword) {
         console.log('Login successful');
-        // Redirect to welcome page with email
+        
         navigate('/welcome', { state: { email: storedEmail } });
       } else {
         console.log('Invalid email or password');
