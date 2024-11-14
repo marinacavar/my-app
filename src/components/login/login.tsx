@@ -1,22 +1,25 @@
+// src/components/login/login.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.scss';
 
-const Login: React.FC = () => {
+type LoginProps = {
+  onLogin: (email: string) => void;
+};
+
+const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
     const storedData = localStorage.getItem('registrationData');
     if (storedData) {
       const { email: storedEmail, password: storedPassword } = JSON.parse(storedData);
-     
       if (email === storedEmail && password === storedPassword) {
         console.log('Login successful');
-        
+        onLogin(storedEmail);
         navigate('/welcome', { state: { email: storedEmail } });
       } else {
         console.log('Invalid email or password');

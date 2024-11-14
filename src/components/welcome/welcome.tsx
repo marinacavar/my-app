@@ -13,14 +13,14 @@ const Welcome: React.FC = () => {
   };
 
   const handleToDoList = () => {
-    navigate('/todo-list');
+    navigate('/categories');
   };
 
   return (
     <div className="welcome-page">
       <h1>Welcome: {email}</h1>
       <button className="logout-button" onClick={handleLogout}>Logout</button>
-      <button className="todo-button" onClick={handleToDoList}>Go to To-Do List</button>
+      <button className="todo-button" onClick={handleToDoList}>Go to Categories</button>
     </div>
   );
 };

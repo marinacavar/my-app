@@ -15,18 +15,18 @@ const ToDoList: React.FC = () => {
 
   return (
     <div className='todo-list'>
-      <div className='todo-item'>
+      <div className='todo-container'>
         <h1>My To-Do List</h1>
         <Todo addTodo={addTodo} todos={todos} />
+        <ul>
+          {todos.map((todo, index) => (
+            <li key={index}>
+              {todo}
+              <button onClick={() => removeTodo(index)}>Remove</button>
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul>
-        {todos.map((todo, index) => (
-          <li key={index}>
-            {todo}
-            <button onClick={() => removeTodo(index)}>Remove</button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
