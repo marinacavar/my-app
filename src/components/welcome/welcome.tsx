@@ -19,7 +19,6 @@ const Welcome: React.FC = () => {
   return (
     <div className="welcome-page">
       <h1>Welcome: {email}</h1>
-      <button className="logout-button" onClick={handleLogout}>Logout</button>
       <button className="todo-button" onClick={handleToDoList}>Go to Categories</button>
     </div>
   );

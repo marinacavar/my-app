@@ -1,7 +1,8 @@
-// src/components/login/login.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.scss';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 type LoginProps = {
   onLogin: (email: string) => void;
@@ -10,22 +11,20 @@ type LoginProps = {
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const storedData = localStorage.getItem('registrationData');
-    if (storedData) {
-      const { email: storedEmail, password: storedPassword } = JSON.parse(storedData);
-      if (email === storedEmail && password === storedPassword) {
-        console.log('Login successful');
-        onLogin(storedEmail);
-        navigate('/welcome', { state: { email: storedEmail } });
-      } else {
-        console.log('Invalid email or password');
-      }
-    } else {
-      console.log('No registration data found');
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('Login successful');
+      onLogin(user.email!);
+      navigate('/welcome', { state: { email: user.email } });
+    } catch (error) {
+      setError((error as Error).message);
+      console.log('Error logging in:', error);
     }
   };
 
@@ -59,6 +58,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         <button type="submit">Login</button>
       </form>
       <button onClick={handleRegister}>Nemate račun? Registrirajte se!</button>
+      {error && <p className="error">{error}</p>}
     </div>
   );
 };

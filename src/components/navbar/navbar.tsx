@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
 import './navbar.scss';
 
 type NavbarProps = {
@@ -10,9 +12,14 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ email, onLogout }) => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    onLogout();
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      onLogout();
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (

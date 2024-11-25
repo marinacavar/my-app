@@ -1,19 +1,41 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
+  console.log(user);
+
+  if(loading){
+    return <div>Loading...</div>
+  }
 
   const handleRegisterClick = () => {
     navigate('/register');
   };
 
+  const handleWelcomeClick = () => {
+    navigate('/welcome');
+  };
+
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
+
+
   return (
     <div className="app">
       <div className="app__welcome">
-      <h1>Welcome to the Home Page!</h1>
-      <button onClick={handleRegisterClick}>Go to Registration</button>
-    </div>
+        <h1>Welcome to the Home Page!</h1>
+        {user ? (
+          <button onClick={handleWelcomeClick}>Go to Welcome Page</button>
+        ) : (
+          <button onClick={handleLoginClick}>Go to Login</button>
+        )}
+        {/* <button onClick={handleRegisterClick}>Go to Registration</button> */}
+      </div>
     </div>
   );
 };

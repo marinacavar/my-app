@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './registration.scss';
+import { auth } from '../../firebase';
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Registration: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [gender, setGender] = useState('');
   const [country, setCountry] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const registrationData = {
-      email,
-      password,
-      gender,
-      country,
-    };
-    localStorage.setItem('registrationData', JSON.stringify(registrationData));
-    console.log('Registration data saved to local storage:', registrationData);
+  const handleRegister = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Save additional user information to local storage
+      const userInfo = { email, gender, country };
+      localStorage.setItem('user', JSON.stringify(userInfo));
+
+      console.log('User registered and data saved to local storage:', userInfo);
+      navigate('/login', { state: { email } });
+    } catch (error) {
+      setError((error as Error).message);
+    }
   };
 
   const handleLoginClick = () => {
@@ -88,6 +95,7 @@ const Registration: React.FC = () => {
         <button type="submit">Register</button>
       </form>
       <button onClick={handleLoginClick}>Already have an account? Login</button>
+      {error && <p className="error">{error}</p>}
     </div>
   );
 };
