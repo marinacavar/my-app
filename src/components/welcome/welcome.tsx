@@ -5,7 +5,8 @@ import './welcome.scss';
 const Welcome: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { email } = location.state as { email: string };
+
+  const { email } = location.state || { email: 'Guest' };
 
   const handleLogout = () => {
     localStorage.removeItem('registrationData');
@@ -17,7 +18,7 @@ const Welcome: React.FC = () => {
   };
 
   return (
-    <div className="welcome-page">
+    <div className="welcome-page" >
       <h1>Welcome: {email}</h1>
       <button className="todo-button" onClick={handleToDoList}>Go to Categories</button>
     </div>
